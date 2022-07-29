@@ -8,6 +8,9 @@ class Clients(models.Model):
         managed = False
         db_table = 'clients'
 
+    def __str__(self):
+        return self.name
+
 
 class Durations(models.Model):
     client = models.ForeignKey('Clients',
@@ -24,6 +27,9 @@ class Durations(models.Model):
         managed = False
         db_table = 'durations'
 
+    def __str__(self):
+        return self.client.name
+
 
 class Equipment(models.Model):
     client_id = models.IntegerField()
@@ -33,6 +39,9 @@ class Equipment(models.Model):
         managed = False
         db_table = 'equipment'
 
+    def __str__(self):
+        return self.name
+
 
 class Modes(models.Model):
     name = models.TextField(unique=True, blank=True, null=True)
@@ -40,3 +49,6 @@ class Modes(models.Model):
     class Meta:
         managed = False
         db_table = 'modes'
+
+    def __str__(self):
+        return self.name
