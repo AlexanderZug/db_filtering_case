@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+  </head>
+  <body>
+    {% for obj in page_obj %}
+      <p>{{ obj.equipment.name }}</p>
+      <p>{{ obj.client.name}}</p>
+{#      <p>{{ obj.mode.name}}</p>#}
+    {% endfor %}
+  </body>
+</html>
