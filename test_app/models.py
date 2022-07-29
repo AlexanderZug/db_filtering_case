@@ -21,7 +21,7 @@ class Durations(models.Model):
     stop = models.DateTimeField()
     mode = models.ForeignKey('Modes',
                              on_delete=models.CASCADE)
-    minutes = models.IntegerField()
+    minutes = models.PositiveIntegerField()
 
     class Meta:
         managed = False
