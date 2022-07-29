@@ -13,14 +13,11 @@ class Clients(models.Model):
 
 
 class Durations(models.Model):
-    client = models.ForeignKey('Clients',
-                               on_delete=models.CASCADE)
-    equipment = models.ForeignKey('Equipment',
-                                  on_delete=models.CASCADE)
+    client = models.ForeignKey('Clients', on_delete=models.CASCADE)
+    equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE)
     start = models.DateTimeField()
     stop = models.DateTimeField()
-    mode = models.ForeignKey('Modes',
-                             on_delete=models.CASCADE)
+    mode = models.ForeignKey('Modes', on_delete=models.CASCADE)
     minutes = models.PositiveIntegerField()
 
     class Meta:

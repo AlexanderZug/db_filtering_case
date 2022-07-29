@@ -5,17 +5,18 @@
     <title>Index</title>
   </head>
   <body>
-    {% for obj in page_obj %}
-      {#      <p>{{ obj.equipment.name }}</p>#}
-      {#      <p>{{ obj.client.name}}</p>#}
-      {#      <p>{{ obj.mode.name}}</p>#}
-    {% endfor %}
-
     <form method="post" action="{% url 'test_app:index' %}">
       {% csrf_token %}
       {{ form.as_p }}
       {{ time }}
       <input type="submit" value="Зарегистрироваться">
     </form>
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          {{ message|safe }}
+        {% endfor %}
+      </ul>
+    {% endif %}
   </body>
 </html>
