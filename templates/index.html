@@ -6,15 +6,15 @@
   </head>
   <body>
     {% for obj in page_obj %}
-{#      <p>{{ obj.equipment.name }}</p>#}
-{#      <p>{{ obj.client.name}}</p>#}
-{#      <p>{{ obj.mode.name}}</p>#}
+      {#      <p>{{ obj.equipment.name }}</p>#}
+      {#      <p>{{ obj.client.name}}</p>#}
+      {#      <p>{{ obj.mode.name}}</p>#}
     {% endfor %}
 
-      <form method="post" action="{% url 'test_app:index' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Зарегистрироваться">
-  </form>
+    <form method="post" action="{% url 'test_app:index' %}">
+      {% csrf_token %}
+          {{ form.as_p }}
+      <input type="submit" value="Зарегистрироваться">
+    </form>
   </body>
 </html>
