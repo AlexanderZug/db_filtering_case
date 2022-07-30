@@ -1,8 +1,5 @@
-import operator
-from functools import reduce
 
 from django.contrib import messages
-from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView
@@ -20,16 +17,21 @@ class IndexView(CreateView):
         instance = form.save(commit=False)
         bd_filter = Durations.objects.select_related(
             'equipment', 'client', 'mode'
-        ).filter(
-            reduce(operator.and_, (Q(client=instance.client),))
-            | reduce(operator.and_, (Q(equipment=instance.equipment),))
-            | reduce(operator.and_, (Q(mode=instance.mode),))
-            | reduce(operator.and_, (Q(minutes=instance.minutes),))
-            | reduce(operator.and_, (Q(start=instance.start),))
-            | reduce(operator.and_, (Q(stop=instance.stop),))
+        ).filter(client=instance.client, equipment=instance.equipment,
+                 mode=instance.mode, minutes=instance.minutes,
+                 start__year=instance.start.date().year, stop__year=instance.stop.date().year,
+                 start__month=instance.start.date().month, stop__month=instance.stop.date().month,
+                 start__day=instance.start.date().day, stop__day=instance.stop.date().day,
+                 start__hour=instance.start.time().hour, stop__hour=instance.stop.time().hour,
         )
-        result = ''
-        for i in bd_filter:
-            result += f'{i.client} {i.equipment} {i.mode} {i.minutes} {i.start} {i.stop}<br>'
-        messages.success(self.request, result)
+        if bd_filter:
+            result = ''
+            for i in bd_filter:
+                result += (f'{i.client} {i.equipment} {i.mode} {i.minutes} '
+                           f'{i.start.strftime("%m/%d/%Y, %H")} '
+                           f'{i.stop.strftime("%m/%d/%Y, %H")}<br> ')
+            messages.success(self.request, result)
+        else:
+            messages.success(self.request, '!')
+            return HttpResponseRedirect(reverse('test_app:index'))
         return HttpResponseRedirect(reverse('test_app:index'))
