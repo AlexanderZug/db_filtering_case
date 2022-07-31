@@ -19,7 +19,7 @@ class DBQuerySet(QuerySet):
             stop__hour=instance.stop.time().hour,
         )
 
-    def db_query_without_day(self, instance):
+    def db_query_without_hour(self, instance):
         return self.filter(
             client=instance.client,
             equipment=instance.equipment,
@@ -33,7 +33,7 @@ class DBQuerySet(QuerySet):
             stop__day=instance.stop.date().day,
         )
 
-    def db_query_without_month(self, instance):
+    def db_query_without_day(self, instance):
         return self.filter(
             client=instance.client,
             equipment=instance.equipment,
@@ -45,6 +45,24 @@ class DBQuerySet(QuerySet):
             stop__month=instance.stop.date().month,
         )
 
+    def db_query_without_month(self, instance):
+        return self.filter(
+            client=instance.client,
+            equipment=instance.equipment,
+            mode=instance.mode,
+            minutes=instance.minutes,
+            start__year=instance.start.date().year,
+            stop__year=instance.stop.date().year,
+        )
+
+    def db_query_without_year(self, instance):
+        return self.filter(
+            client=instance.client,
+            equipment=instance.equipment,
+            mode=instance.mode,
+            minutes=instance.minutes,
+        )
+
 
 class DBManager(models.Manager):
     def get_queryset(self):
@@ -53,8 +71,14 @@ class DBManager(models.Manager):
     def db_query(self, instance):
         return self.get_queryset().db_query(instance)
 
+    def db_query_without_hour(self, instance):
+        return self.get_queryset().db_query_without_day(instance)
+
     def db_query_without_day(self, instance):
-        return self.get_queryset().db_query_without_month(instance)
+        return self.get_queryset().db_query_without_hour(instance)
 
     def db_query_without_month(self, instance):
-        return self.get_queryset().db_query_without_day(instance)
+        return self.get_queryset().db_query_without_hour(instance)
+
+    def db_query_without_year(self, instance):
+        return self.get_queryset().db_query_without_hour(instance)

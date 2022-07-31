@@ -4,10 +4,12 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView
 
 from test_app.forms import DurationsForm
-from test_app.models import Durations
 from test_app.utils import (result_to_output_all_data,
                             result_to_output_without_day,
-                            result_to_output_without_hour)
+                            result_to_output_without_hour,
+                            filtered_time_query_set,
+                            result_to_output_without_month,
+                            result_to_output_without_year)
 
 
 class IndexView(CreateView):
@@ -17,19 +19,15 @@ class IndexView(CreateView):
 
     def form_valid(self, form):
         instance = form.save(commit=False)
-        query = Durations.filters_manager.select_related(
-            'client', 'mode', 'equipment'
-        ).db_query(instance)
-        month = Durations.filters_manager.select_related(
-            'client', 'mode', 'equipment'
-        ).db_query_without_month(instance)
-        day = Durations.filters_manager.select_related(
-            'client', 'mode', 'equipment'
-        ).db_query_without_day(instance)
+        query = filtered_time_query_set()['query'](instance)
         if query:
             messages.success(self.request, result_to_output_all_data(query))
-        elif day:
-            messages.success(self.request, result_to_output_without_hour(day))
-        elif month:
-            messages.success(self.request, result_to_output_without_day(month))
+        elif filtered_time_query_set()['hour'](instance):
+            messages.success(self.request, result_to_output_without_hour(filtered_time_query_set()['hour'](instance)))
+        elif filtered_time_query_set()['day'](instance):
+            messages.success(self.request, result_to_output_without_day(filtered_time_query_set()['day'](instance)))
+        elif filtered_time_query_set()['month'](instance):
+            messages.success(self.request, result_to_output_without_month(filtered_time_query_set()['month'](instance)))
+        elif filtered_time_query_set()['year'](instance):
+            messages.success(self.request, result_to_output_without_year(filtered_time_query_set()['year'](instance)))
         return HttpResponseRedirect(reverse('test_app:index'))
