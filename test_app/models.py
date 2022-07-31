@@ -1,5 +1,7 @@
 from django.db import models
 
+from test_app.utils import DBManager
+
 
 class Clients(models.Model):
     name = models.TextField()
@@ -19,6 +21,8 @@ class Durations(models.Model):
     stop = models.DateTimeField()
     mode = models.ForeignKey('Modes', on_delete=models.CASCADE)
     minutes = models.PositiveIntegerField()
+    objects = models.Manager()
+    filters_manager = DBManager()
 
     class Meta:
         managed = False
