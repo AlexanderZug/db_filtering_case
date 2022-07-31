@@ -5,6 +5,7 @@ from django.views.generic import CreateView
 
 from test_app.forms import DurationsForm
 from test_app.models import Durations
+from test_app.utils import result_to_output_all_data, result_to_output_without_hour, result_to_output_without_day
 
 
 class IndexView(CreateView):
@@ -14,17 +15,13 @@ class IndexView(CreateView):
 
     def form_valid(self, form):
         instance = form.save(commit=False)
-        res = Durations.filters_manager.db_query(instance)
-        res_tree = Durations.filters_manager.db_query_time_month(instance)
-        res_four = Durations.filters_manager.db_query_time_day(instance)
-        res_two = Durations.filters_manager.db_query_time_hours(instance)
-        if res and res_tree and res_four and res_two:
-            print('!!')
-            result = ''
-            for i in res:
-                result += (f'Client: {i.client} | Equipment: {i.equipment} | Mode: {i.mode} '
-                           f'| Minutes: {i.minutes} '
-                           f'| Start: {i.start.strftime("%m/%d/%Y, %H")} '
-                           f'| Stop: {i.stop.strftime("%m/%d/%Y, %H")}<br> ')
-            messages.success(self.request, result)
+        query = Durations.filters_manager.select_related('client', 'mode', 'equipment').db_query(instance)
+        month = Durations.filters_manager.select_related('client', 'mode', 'equipment').db_query_time_month(instance)
+        day = Durations.filters_manager.select_related('client', 'mode', 'equipment').db_query_time_day(instance)
+        if query:
+            messages.success(self.request, result_to_output_all_data(query))
+        if day:
+            messages.success(self.request, result_to_output_without_hour(day))
+        if month:
+            messages.success(self.request, result_to_output_without_day(month))
         return HttpResponseRedirect(reverse('test_app:index'))

@@ -1,41 +1,30 @@
-from django.db import models
-from django.db.models.query import QuerySet
+def result_to_output_all_data(query):
+    result = ''
+    for i in query:
+        result += (f'Client: {i.client} '
+                   f'| Equipment: {i.equipment} '
+                   f'| Mode: {i.mode} '
+                   f'| Minutes: {i.minutes} '
+                   f'| Start: {i.start.strftime("%m/%d/%Y, %H")} '
+                   f'| Stop: {i.stop.strftime("%m/%d/%Y, %H")}<br> ')
+    return result
 
 
-class DBQuerySet(QuerySet):
-    def db_query(self, instance):
-        print(111)
-        return self.filter(client=instance.client, equipment=instance.equipment,
-                           mode=instance.mode, minutes=instance.minutes,
-                           start__year=instance.start.date().year,
-                           stop__year=instance.stop.date().year, )
-
-    def db_query_time_month(self, instance):
-        print(222)
-        return self.filter(start__month=instance.start.date().month,
-                           stop__month=instance.stop.date().month, )
-
-    def db_query_time_day(self, instance):
-        return self.filter(start__day=instance.start.date().day,
-                           stop__day=instance.stop.date().day, )
-
-    def db_query_time_hours(self, instance):
-        return self.filter(start__hour=instance.start.time().hour,
-                           stop__hour=instance.stop.time().hour, )
+def result_to_output_without_day(query):
+    result = ''
+    for i in query:
+        result += (f'Client: {i.client} | Equipment: {i.equipment} | Mode: {i.mode} '
+                   f'| Minutes: {i.minutes} '
+                   f'| Start: {i.start.strftime("%m/%Y")} No data  No data '
+                   f'| Stop: {i.stop.strftime("%m/%Y")} No data  No data <br> ')
+    return result
 
 
-class DBManager(models.Manager):
-    def get_queryset(self):
-        return DBQuerySet(self.model, using=self._db)
-
-    def db_query(self, instance):
-        return self.get_queryset().db_query(instance)
-
-    def db_query_time_month(self, instance):
-        return self.get_queryset().db_query_time_month(instance)
-
-    def db_query_time_day(self, instance):
-        return self.get_queryset().db_query_time_day(instance)
-
-    def db_query_time_hours(self, instance):
-        return self.get_queryset().db_query_time_hours(instance)
+def result_to_output_without_hour(query):
+    result = ''
+    for i in query:
+        result += (f'Client: {i.client} | Equipment: {i.equipment} | Mode: {i.mode} '
+                   f'| Minutes: {i.minutes} '
+                   f'| Start: {i.start.strftime("%m/%d/%Y")}  No data '
+                   f'| Stop: {i.stop.strftime("%m/%d/%Y")}  No data <br> ')
+    return result

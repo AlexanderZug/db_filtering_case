@@ -1,6 +1,6 @@
 from django.db import models
 
-from test_app.utils import DBManager
+from test_app.managers import DBManager
 
 
 class Clients(models.Model):
