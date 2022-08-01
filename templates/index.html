@@ -3,20 +3,32 @@
   <head>
     <meta charset="UTF-8">
     <title>Index</title>
+    <style>
+        div {
+            background-color: mediumaquamarine;
+            width: 1200px;
+            height: 600px;
+            text-align: center;
+            margin: auto;
+            padding-top: 20px;
+        }
+    </style>
   </head>
   <body>
-    <form method="post" action="{% url 'test_app:index' %}">
-      {% csrf_token %}
-      {{ form.as_p }}
-      {{ time }}
-      <input type="submit" value="Зарегистрироваться">
-    </form>
-    {% if messages %}
-      <ul class="messages">
-        {% for message in messages %}
-          {{ message|safe }}
-        {% endfor %}
-      </ul>
-    {% endif %}
+    <div>
+      <form method="post" action="{% url 'test_app:index' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {{ time }}
+        <input type="submit" value="Enter data">
+      </form>
+      {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+            {{ message|safe }}
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
   </body>
 </html>

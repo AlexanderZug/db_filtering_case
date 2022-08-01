@@ -12,12 +12,9 @@ class DateTimeInput(forms.DateTimeInput):
 
 
 class DurationsForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['client'].empty_label = "Не выбрано!"
-
     class Meta:
         model = Durations
+
         fields = (
             'client',
             'equipment',

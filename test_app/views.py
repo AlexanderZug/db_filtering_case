@@ -21,5 +21,4 @@ class IndexView(CreateView):
                     CheckQuerySet(i(instance), k).get_output(),
                 )
                 break
-        messages.error(self.request, 'Запрашиваемых данных не найдено')
         return HttpResponseRedirect(reverse('test_app:index'))
