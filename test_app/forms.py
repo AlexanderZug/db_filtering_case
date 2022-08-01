@@ -4,6 +4,8 @@ from test_app.models import Durations
 
 
 class DateTimeInput(forms.DateTimeInput):
+    """Changing time entry format."""
+
     input_type = 'datetime-local'
 
     def __init__(self, **kwargs):

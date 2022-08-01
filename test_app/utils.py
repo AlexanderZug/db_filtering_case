@@ -1,7 +1,10 @@
+from typing import Dict, Union, Any
+
 from test_app.models import Durations
 
 
-def filtered_time_query_set():
+def filtered_time_query_set() -> Dict[str, Union[Any, Any]]:
+    """Dict with filters and keywords."""
     db_set = {
         'query': lambda instance: Durations.filters_manager.select_related(
             'client', 'mode', 'equipment'
@@ -23,11 +26,13 @@ def filtered_time_query_set():
 
 
 class CheckQuerySet:
+    """Class gets the filtered query sets and sends them to template."""
+
     def __init__(self, query, key):
         self.query = query
         self.key = key
 
-    def __result_to_output_all_data(self):
+    def __result_to_output_all_data(self) -> str:
         result = ''
         for i in self.query:
             result += (
@@ -40,51 +45,59 @@ class CheckQuerySet:
             )
         return result
 
-    def __result_to_output_without_year(self):
+    def __result_to_output_without_year(self) -> str:
         result = ''
         for i in self.query:
             result += (
-                f'Client: {i.client} | Equipment: {i.equipment} | Mode: {i.mode} '
+                f'Client: {i.client} '
+                f'| Equipment: {i.equipment} '
+                f'| Mode: {i.mode} '
                 f'| Minutes: {i.minutes} '
                 f'| Start: No data No data No data  No data '
                 f'| Stop: No data No data No data No data <br> '
             )
         return result
 
-    def __result_to_output_without_month(self):
+    def __result_to_output_without_month(self) -> str:
         result = ''
         for i in self.query:
             result += (
-                f'Client: {i.client} | Equipment: {i.equipment} | Mode: {i.mode} '
+                f'Client: {i.client} '
+                f'| Equipment: {i.equipment} '
+                f'| Mode: {i.mode} '
                 f'| Minutes: {i.minutes} '
                 f'| Start: {i.start.strftime("%Y")} No data No data  No data '
                 f'| Stop: {i.stop.strftime("%Y")} No data No data  No data <br> '
             )
         return result
 
-    def __result_to_output_without_day(self):
+    def __result_to_output_without_day(self) -> str:
         result = ''
         for i in self.query:
             result += (
-                f'Client: {i.client} | Equipment: {i.equipment} | Mode: {i.mode} '
+                f'Client: {i.client} '
+                f'| Equipment: {i.equipment} '
+                f'| Mode: {i.mode} '
                 f'| Minutes: {i.minutes} '
                 f'| Start: {i.start.strftime("%m/%Y")} No data  No data '
                 f'| Stop: {i.stop.strftime("%m/%Y")} No data  No data <br> '
             )
         return result
 
-    def __result_to_output_without_hour(self):
+    def __result_to_output_without_hour(self) -> str:
         result = ''
         for i in self.query:
             result += (
-                f'Client: {i.client} | Equipment: {i.equipment} | Mode: {i.mode} '
+                f'Client: {i.client} '
+                f'| Equipment: {i.equipment} '
+                f'| Mode: {i.mode} '
                 f'| Minutes: {i.minutes} '
                 f'| Start: {i.start.strftime("%m/%d/%Y")}  No data '
                 f'| Stop: {i.stop.strftime("%m/%d/%Y")}  No data <br> '
             )
         return result
 
-    def get_output(self):
+    def get_output(self) -> str:
         if self.key == 'query':
             return self.__result_to_output_all_data()
         elif self.key == 'hour':

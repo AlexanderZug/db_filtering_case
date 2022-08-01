@@ -3,6 +3,8 @@ from django.db.models.query import QuerySet
 
 
 class DBQuerySet(QuerySet):
+    """Create class for filtering."""
+
     def db_query(self, instance):
         return self.filter(
             client=instance.client,
@@ -65,6 +67,8 @@ class DBQuerySet(QuerySet):
 
 
 class DBManager(models.Manager):
+    """Class for models, overrides base model.Manager()."""
+
     def get_queryset(self):
         return DBQuerySet(self.model, using=self._db)
 
